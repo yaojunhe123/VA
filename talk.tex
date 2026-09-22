@@ -6,6 +6,10 @@
 \subtitle{An Image-Based Exploration and Query System for Large Visualization Collections}
 \date{\today}
 
+\newcommand{\stagebadge}[1]{%
+  \tikz[baseline=-0.55ex]\node[circle,fill=lumenPrimary,text=white,inner sep=1pt,font=\scriptsize\bfseries]{#1};%
+}
+
 \begin{document}
 
 \begin{frame}[plain]
@@ -26,7 +30,7 @@
   \end{quote}
   \vfill
   {\color{lumenPrimary}\bfseries Although visual appearance is directly perceived by humans, it has often been overlooked as an analyzable property of visualization collections.\par}
-  \vskip0.6em
+  \vskip0.4em
   \begin{flushright}
     \scriptsize Y.~Ye, R.~Huang, W.~Zeng. \emph{VISAtlas}. IEEE TVCG 30(7):3224--3240, 2024.
   \end{flushright}
@@ -42,7 +46,7 @@
   \end{quote}
   \vfill
   {\color{lumenPrimary}\bfseries VISAtlas represents the visual appearance of visualizations as interpretable embeddings, enabling users to explore, compare, and query visualization collections based on visual features rather than only extrinsic metadata.\par}
-  \vskip0.6em
+  \vskip0.4em
   \begin{flushright}
     \scriptsize Y.~Ye, R.~Huang, W.~Zeng. \emph{VISAtlas}. IEEE TVCG 30(7):3224--3240, 2024.
   \end{flushright}
@@ -51,6 +55,119 @@
 \begin{frame}{Related Work: Citation Provenance}
   \centering
   \includegraphics[width=\textwidth]{figures/citation_provenance.pdf}
+\end{frame}
+
+\begin{frame}{VISAtlas System Overview}
+  \vspace*{-0.3cm}
+  \begin{minipage}[t][7.05cm]{0.30\textwidth}
+    \centering
+    {\small\bfseries\color{lumenPrimary}What goes in?\par}
+    \vskip0.05em
+    {\tiny\color{lumenSlate}Diverse visualization images\par}
+    \vskip0.45em
+    {\scriptsize\bfseries Synthetic Visualizations\par}
+    \vskip0.08em
+    \includegraphics[width=1.42cm]{figures/left_syn_area.png}\hskip0.04cm
+    \includegraphics[width=1.42cm]{figures/left_syn_bar.png}\hskip0.04cm
+    \includegraphics[width=1.42cm]{figures/left_syn_line.png}\par
+    \vskip0.1em
+    {\tiny\color{lumenSlate}Diverse chart types, data distributions, and colormaps\par}
+    \vskip0.5em
+    {\scriptsize\bfseries Real-World Visualizations\par}
+    \vskip0.08em
+    \includegraphics[width=1.28cm]{figures/left_real1.png}\hskip0.06cm
+    \includegraphics[width=1.28cm]{figures/left_real2.png}\hskip0.06cm
+    \includegraphics[width=1.28cm]{figures/left_real3.png}\par
+    \vskip0.1em
+    {\tiny\color{lumenSlate}Web-crawled visualizations reflecting realistic usage\par}
+    \vfill
+    {\footnotesize\bfseries\color{lumenPrimary}Diverse visualizations\par}
+  \end{minipage}\hfill{\color{lumenEdge}$\rightarrow$}\hfill
+  \begin{minipage}[t][7.05cm]{0.335\textwidth}
+    \centering
+    {\small\bfseries\color{lumenPrimary}What does VISAtlas do?\par}
+    \vskip0.05em
+    {\tiny\color{lumenSlate}Encode visual appearance\par}
+    \vfill
+    \includegraphics[height=1.2cm]{figures/center_input.png}\hskip0.04cm
+    {\color{lumenAccent}\small$\rightarrow$}\hskip0.04cm
+    \includegraphics[height=1.0cm]{figures/center_cnn.png}\hskip0.04cm
+    {\color{lumenAccent}\small$\rightarrow$}\hskip0.04cm
+    \includegraphics[height=1.6cm]{figures/center_vector.png}\par
+    \vskip0.15em
+    {\tiny\color{lumenSlate}Human-interpretable semantic embedding\par}
+    \vfill
+    {\footnotesize\bfseries\color{lumenPrimary}Interpretable semantic representation\par}
+  \end{minipage}\hfill{\color{lumenEdge}$\rightarrow$}\hfill
+  \begin{minipage}[t][7.05cm]{0.30\textwidth}
+    \centering
+    {\small\bfseries\color{lumenPrimary}What can users do?\par}
+    \vskip0.25em
+    {\scriptsize\bfseries Explore\par}
+    \vskip0.05em
+    \includegraphics[width=1.5cm]{figures/right_explore.png}\par
+    \vskip0.05em
+    {\tiny\color{lumenSlate}Collection structure\par}
+    \vskip0.2em
+    {\scriptsize\bfseries Compare\par}
+    \vskip0.05em
+    \includegraphics[width=3.8cm]{figures/right_compare.png}\par
+    \vskip0.05em
+    {\tiny\color{lumenSlate}Embedding distributions\par}
+    \vskip0.2em
+    {\scriptsize\bfseries Query\par}
+    \vskip0.05em
+    \includegraphics[width=3.8cm]{figures/right_query.png}\par
+    \vskip0.05em
+    {\tiny\color{lumenSlate}Similar designs\par}
+    \vfill
+    {\footnotesize\bfseries\color{lumenPrimary}Visual analytics tasks\par}
+  \end{minipage}
+\end{frame}
+
+\begin{frame}{Data Collection}
+  \framesubtitle{Controlled coverage + realistic diversity}
+  \vspace*{-0.25cm}
+  \begin{minipage}[t][5.7cm]{0.48\textwidth}
+    \centering
+    {\small\bfseries\color{lumenPrimary}Synthetic Visualizations\par}
+    \vskip0.05em
+    {\tiny\color{lumenSlate}Controlled coverage\par}
+    \vskip0.4em
+    \includegraphics[width=2.3cm]{figures/syn_d2v_bar.png}\hskip0.04cm
+    \includegraphics[width=2.3cm]{figures/syn_d2v_line.png}\hskip0.04cm
+    \includegraphics[width=2.3cm]{figures/syn_d2v_scat.png}\par
+    \vskip0.06em
+    \includegraphics[width=2.3cm]{figures/syn_demo_area.png}\hskip0.04cm
+    \includegraphics[width=2.3cm]{figures/syn_demo_donut.png}\hskip0.04cm
+    \includegraphics[width=2.3cm]{figures/syn_demo_hist.png}\par
+    \vskip0.12em
+    {\tiny\color{lumenSlate}Representative synthetic and demo visualizations\\ from the released VISAtlas resources\par}
+    \vfill
+    {\small\bfseries\color{lumenPrimary}Chart type $\times$ Data distribution $\times$ Colormap\par}
+  \end{minipage}\hfill
+  \begin{minipage}[t][5.7cm]{0.48\textwidth}
+    \centering
+    {\small\bfseries\color{lumenPrimary}Real-World Visualizations\par}
+    \vskip0.05em
+    {\tiny\color{lumenSlate}Realistic diversity\par}
+    \vskip0.45em
+    {\scriptsize\bfseries Beagle --- Web practice\par}
+    \vskip0.08em
+    \includegraphics[width=2.3cm]{figures/rw_beagle1.png}\hskip0.04cm
+    \includegraphics[width=2.3cm]{figures/rw_beagle2.png}\hskip0.04cm
+    \includegraphics[width=2.3cm]{figures/rw_beagle3.png}\par
+    \vskip0.5em
+    {\scriptsize\bfseries VIS30K --- Research practice\par}
+    \vskip0.08em
+    \includegraphics[width=2.3cm]{figures/rw_vis30k1.png}\hskip0.04cm
+    \includegraphics[width=2.3cm]{figures/rw_vis30k2.png}\hskip0.04cm
+    \includegraphics[width=2.3cm]{figures/rw_vis30k3.png}\par
+  \end{minipage}
+  \vskip0.3em
+  {\small\bfseries\color{lumenPrimary}Synthetic coverage $+$ real-world diversity $\rightarrow$ a comprehensive visualization collection\par}
+  \vskip0.08em
+  {\tiny\color{lumenSlate}Examples from the released VISAtlas resources (github.com/yilinye/VisAtlas-Code)\par}
 \end{frame}
 
 \end{document}
