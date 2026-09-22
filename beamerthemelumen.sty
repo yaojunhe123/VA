@@ -1,0 +1,16 @@
+\ProvidesPackage{beamerthemelumen}[2026/09/22 v1.1 A clean and modern beamer theme]
+\mode<presentation>
+
+\DeclareOptionBeamer{palette}{\PassOptionsToPackage{palette=#1}{beamercolorthemelumen}}
+\DeclareOptionBeamer{progressbar}{\PassOptionsToPackage{progress=#1}{beamerouterthemelumen}}
+\DeclareOptionBeamer{sectionpages}{\PassOptionsToPackage{sectionpages=#1}{beamerouterthemelumen}}
+\ProcessOptionsBeamer
+
+\usecolortheme{lumen}
+\usefonttheme{lumen}
+\useinnertheme{lumen}
+\useoutertheme{lumen}
+
+\setbeamertemplate{navigation symbols}{}
+
+\mode<all>

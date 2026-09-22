@@ -1,0 +1,67 @@
+\ProvidesPackage{beamerouterthemelumen}[2026/09/22 v1.0 Lumen outer theme]
+\mode<presentation>
+
+\newif\ifbeamer@lumen@progress
+\beamer@lumen@progresstrue
+\newif\ifbeamer@lumen@sectionpages
+\beamer@lumen@sectionpagestrue
+\DeclareOptionBeamer{progress}[true]{\csname beamer@lumen@progress#1\endcsname}
+\DeclareOptionBeamer{sectionpages}[true]{\csname beamer@lumen@sectionpages#1\endcsname}
+\ProcessOptionsBeamer
+
+\setbeamersize{text margin left=0.65cm,text margin right=0.65cm}
+
+\defbeamertemplate*{frametitle}{lumen}
+{%
+  \nointerlineskip%
+  \ifx\insertframetitle\@empty
+    \vskip0pt%
+  \else
+    \hbox{\hskip-\beamer@leftmargin%
+      \begin{beamercolorbox}[wd=\paperwidth,leftskip=0.65cm,rightskip=0.65cm,sep=0.95ex,vmode]{frametitle}%
+        \usebeamerfont{frametitle}\insertframetitle%
+        \ifx\insertframesubtitle\@empty\else%
+          \\[0.35ex]{\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}%
+        \fi%
+      \end{beamercolorbox}%
+    }%
+    \nointerlineskip%
+    \hbox{\hskip-\beamer@leftmargin{\color{lumenAccent}\vrule width\paperwidth height0.85mm}}%
+    \vskip0.55ex%
+  \fi%
+}
+
+\defbeamertemplate*{footline}{lumen}
+{%
+  \hbox to\paperwidth{%
+    \begin{beamercolorbox}[wd=0.34\paperwidth,ht=2.1ex,dp=1.0ex,leftskip=0.65cm]{author in head/foot}%
+      \usebeamerfont{footline}\insertshortauthor%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=0.46\paperwidth,ht=2.1ex,dp=1.0ex,center]{title in head/foot}%
+      \usebeamerfont{footline}\insertshorttitle%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=0.20\paperwidth,ht=2.1ex,dp=1.0ex,rightskip=0.65cm]{page number in head/foot}%
+      \usebeamerfont{footline}\bfseries\insertframenumber\,/\,\inserttotalframenumber%
+    \end{beamercolorbox}%
+    \hfil%
+  }%
+  \ifbeamer@lumen@progress%
+    \ifnum\inserttotalframenumber>0
+      \hbox to\paperwidth{%
+        \color{lumenAccent}\vrule width\dimexpr\paperwidth*\insertframenumber/\inserttotalframenumber\relax height1.4mm%
+        \color{lumenEdge}\vrule width\dimexpr\paperwidth-\paperwidth*\insertframenumber/\inserttotalframenumber\relax height1.4mm%
+        \hfil%
+      }%
+    \else
+      \hbox to\paperwidth{\color{lumenEdge}\vrule width\paperwidth height1.4mm}%
+    \fi%
+  \fi%
+}
+
+\ifbeamer@lumen@sectionpages
+  \AtBeginSection[]{%
+    \frame[plain]{\sectionpage}%
+  }
+\fi
+
+\mode<all>

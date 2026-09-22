@@ -1,0 +1,38 @@
+\ProvidesPackage{beamerfontthemelumen}[2026/09/22 v1.0 Lumen font theme]
+\mode<presentation>
+
+\RequirePackage{iftex}
+\ifPDFTeX
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[scaled=0.94]{helvet}
+  \renewcommand{\familydefault}{\sfdefault}
+\else
+  \RequirePackage[sfdefault]{FiraSans}
+  \RequirePackage[scaled=0.9]{FiraMono}
+  \RequirePackage{unicode-math}
+  \setmathfont{FiraMath-Regular.otf}
+\fi
+
+\setbeamerfont{title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{subtitle}{size=\normalsize,series=\mdseries}
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{institute}{size=\small}
+\setbeamerfont{date}{size=\small}
+
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{framesubtitle}{size=\small,series=\mdseries}
+
+\setbeamerfont{section title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{section number}{size={\fontsize{60}{62}\selectfont},series=\bfseries}
+\setbeamerfont{section in toc}{size=\normalsize,series=\bfseries}
+\setbeamerfont{subsection in toc}{size=\small}
+
+\setbeamerfont{footline}{size={\fontsize{6.5}{8}\selectfont}}
+
+\setbeamerfont{block title}{size=\normalsize,series=\bfseries}
+\setbeamerfont{block body}{size=\normalsize}
+\setbeamerfont{description item}{series=\bfseries}
+\setbeamerfont{caption}{size=\small}
+\setbeamerfont{caption name}{series=\bfseries}
+
+\mode<all>

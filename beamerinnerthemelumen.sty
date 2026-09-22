@@ -1,0 +1,65 @@
+\ProvidesPackage{beamerinnerthemelumen}[2026/09/22 v1.0 Lumen inner theme]
+\mode<presentation>
+
+\RequirePackage{tikz}
+
+\setbeamertemplate{itemize item}{\usebeamercolor[fg]{itemize item}\tikz[baseline=-0.6ex]\fill (0,0) circle (1.55pt);}
+\setbeamertemplate{itemize subitem}{\usebeamercolor[fg]{itemize subitem}\tikz[baseline=-0.6ex]\fill (0,0) circle (1.1pt);}
+\setbeamertemplate{itemize subsubitem}{\usebeamercolor[fg]{itemize subsubitem}\tikz[baseline=-0.55ex]\fill (0,0) rectangle (1.2pt,1.2pt);}
+
+\setbeamertemplate{enumerate item}{\usebeamercolor[fg]{enumerate item}\bfseries\insertenumlabel.}
+\setbeamertemplate{enumerate subitem}{\usebeamercolor[fg]{enumerate subitem}\bfseries\insertsubenumlabel.}
+\setbeamertemplate{enumerate subsubitem}{\usebeamercolor[fg]{enumerate subsubitem}\bfseries\insertsubsubenumlabel.}
+
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+\setbeamertemplate{section in toc}{%
+  \leavevmode{\usebeamercolor[fg]{section in toc}\bfseries\inserttocsectionnumber.}\hspace{0.8em}\inserttocsection\par}
+\setbeamertemplate{subsection in toc}{%
+  \leavevmode\leftskip=2em{\usebeamercolor[fg]{subsection in toc}\inserttocsubsectionnumber}\hspace{0.7em}\inserttocsubsection\par}
+
+\defbeamertemplate*{title page}{lumen}
+{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[lumenPrimary] (current page.south west) rectangle (current page.north east);
+    \fill[lumenPrimaryDark,opacity=0.65] ([xshift=0.9cm,yshift=-1.7cm]current page.north east) circle (4.1cm);
+    \fill[lumenAccent,opacity=0.35] ([xshift=-1.5cm,yshift=1.3cm]current page.south west) circle (3.2cm);
+  \end{tikzpicture}%
+  \vfill
+  \begingroup
+  \leftskip=1.3cm\rightskip=1.3cm\raggedright
+  {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}%
+  \vskip0.5em
+  {\color{white}\rule{3.4cm}{1.2mm}}\par
+  \ifx\insertsubtitle\@empty\else%
+    \vskip0.85em
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}%
+  \fi%
+  \vskip1.7em
+  {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\par}%
+  \vskip0.4em
+  {\usebeamerfont{institute}\usebeamercolor[fg]{institute}\insertinstitute\par}%
+  \vskip0.4em
+  {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate\par}%
+  \endgroup
+  \vfill
+}
+
+\defbeamertemplate*{section page}{lumen}
+{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[lumenTint] (current page.south west) rectangle (current page.north east);
+    \fill[lumenPrimary] ([yshift=0.9cm]current page.south west) rectangle ([yshift=1.0cm]current page.south east);
+  \end{tikzpicture}%
+  \vfill
+  \begin{center}
+    {\usebeamerfont{section number}\usebeamercolor[fg]{section number}\insertsectionnumber\par}%
+    \vskip0.75em
+    {\color{lumenPrimary}\rule{2.4cm}{1.1mm}}\par
+    \vskip1.05em
+    {\usebeamerfont{section title}\usebeamercolor[fg]{section title}\insertsection\par}%
+  \end{center}
+  \vfill
+}
+
+\mode<all>

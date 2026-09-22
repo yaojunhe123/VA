@@ -1,0 +1,80 @@
+\ProvidesPackage{beamercolorthemelumen}[2026/09/22 v1.1 Lumen color theme]
+\mode<presentation>
+
+\def\beamer@lumen@palette{blue}
+\DeclareOptionBeamer{palette}[blue]{\def\beamer@lumen@palette{#1}}
+\ProcessOptionsBeamer
+
+\def\beamer@lumen@blue{%
+  \definecolor{lumenPrimary}{HTML}{1B4F8A}%
+  \definecolor{lumenPrimaryDark}{HTML}{123A67}%
+  \definecolor{lumenAccent}{HTML}{0E6FC6}%
+  \definecolor{lumenTint}{HTML}{EDF3F9}%
+  \definecolor{lumenEdge}{HTML}{C6D8EA}%
+  \definecolor{lumenInk}{HTML}{1B2430}%
+  \definecolor{lumenSlate}{HTML}{5B6B7C}%
+}
+\def\beamer@lumen@red{%
+  \definecolor{lumenPrimary}{HTML}{A51C30}%
+  \definecolor{lumenPrimaryDark}{HTML}{71121F}%
+  \definecolor{lumenAccent}{HTML}{D2314A}%
+  \definecolor{lumenTint}{HTML}{FBEEF0}%
+  \definecolor{lumenEdge}{HTML}{EFCCD2}%
+  \definecolor{lumenInk}{HTML}{241A1D}%
+  \definecolor{lumenSlate}{HTML}{6E5A5E}%
+}
+
+\expandafter\ifx\csname beamer@lumen@\beamer@lumen@palette\endcsname\relax
+  \def\beamer@lumen@palette{blue}%
+\fi
+\csname beamer@lumen@\beamer@lumen@palette\endcsname
+
+\setbeamercolor{normal text}{fg=lumenInk,bg=white}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{structure}{fg=lumenPrimary}
+\setbeamercolor{alerted text}{fg=lumenAccent}
+\setbeamercolor{example text}{fg=lumenPrimary!75}
+
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=lumenEdge}
+\setbeamercolor{author}{fg=white}
+\setbeamercolor{institute}{fg=lumenEdge}
+\setbeamercolor{date}{fg=lumenEdge}
+\setbeamercolor{titlegraphic}{fg=white}
+
+\setbeamercolor{frametitle}{fg=white,bg=lumenPrimary}
+\setbeamercolor{framesubtitle}{fg=lumenEdge}
+
+\setbeamercolor{section title}{fg=lumenPrimary}
+\setbeamercolor{section number}{fg=lumenPrimary!18}
+\setbeamercolor{section in toc}{fg=lumenPrimary}
+\setbeamercolor{subsection in toc}{fg=lumenSlate}
+
+\setbeamercolor{author in head/foot}{fg=lumenSlate}
+\setbeamercolor{title in head/foot}{fg=lumenSlate}
+\setbeamercolor{page number in head/foot}{fg=lumenPrimary}
+
+\setbeamercolor{caption}{fg=lumenSlate}
+\setbeamercolor{caption name}{fg=lumenPrimary}
+
+\setbeamercolor{itemize item}{fg=lumenPrimary}
+\setbeamercolor{itemize subitem}{fg=lumenPrimary!65}
+\setbeamercolor{itemize subsubitem}{fg=lumenPrimary!40}
+\setbeamercolor{enumerate item}{fg=lumenPrimary}
+\setbeamercolor{enumerate subitem}{fg=lumenPrimary!65}
+\setbeamercolor{enumerate subsubitem}{fg=lumenPrimary!40}
+\setbeamercolor{description item}{fg=lumenPrimary}
+
+\setbeamercolor{block title}{fg=white,bg=lumenPrimary}
+\setbeamercolor{block body}{fg=lumenInk,bg=lumenTint}
+\setbeamercolor{block title example}{fg=white,bg=lumenPrimary!72}
+\setbeamercolor{block body example}{fg=lumenInk,bg=lumenPrimary!9}
+\setbeamercolor{block title alerted}{fg=white,bg=lumenAccent}
+\setbeamercolor{block body alerted}{fg=lumenInk,bg=lumenAccent!9}
+
+\setbeamercolor{theorem name}{fg=lumenPrimary}
+\setbeamercolor{definition name}{fg=lumenPrimary}
+\setbeamercolor{example name}{fg=lumenPrimary!72}
+\setbeamercolor{proof name}{fg=lumenSlate}
+
+\mode<all>
