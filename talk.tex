@@ -1,6 +1,8 @@
 \documentclass[aspectratio=169]{beamer}
 \providecommand{\lumenpalette}{blue}
 \usetheme[palette=\lumenpalette,progressbar=true,sectionpages=true]{lumen}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{amssymb}
 
 \title{Reproducing VISAtlas}
 \subtitle{An Image-Based Exploration and Query System for Large Visualization Collections}
@@ -168,6 +170,255 @@
   {\small\bfseries\color{lumenPrimary}Synthetic coverage $+$ real-world diversity $\rightarrow$ a comprehensive visualization collection\par}
   \vskip0.08em
   {\tiny\color{lumenSlate}Examples from the released VISAtlas resources (github.com/yilinye/VisAtlas-Code)\par}
+\end{frame}
+
+\begin{frame}{Image Embedding via CNN}
+  \framesubtitle{From pixels to feature maps to an 11-D representation}
+  \vspace*{-0.35cm}
+  \vfill
+  \begin{center}
+    \includegraphics[width=0.97\textwidth]{figures/resnet_stages.png}
+  \end{center}
+  \vfill
+  \begin{center}
+    \setlength{\fboxsep}{4pt}%
+    \colorbox{lumenTint}{%
+      \parbox{0.94\textwidth}{\centering\small
+        \textbf{ResNet50 transforms spatial patterns into a compact numerical embedding.}}}%
+  \end{center}
+  \vskip0.15em
+\end{frame}
+
+\begin{frame}{From Triplet Metric Learning to VISAtlas}
+  \framesubtitle{From identity-based metric learning to visualization-type-aware embeddings}
+  \vspace*{-0.4cm}
+  \begin{minipage}[t]{0.40\textwidth}
+    \centering
+    {\small\bfseries\color{lumenPrimary}Triplet Metric Learning --- FaceNet\par}
+    \vskip0.25em
+    \includegraphics[width=5.1cm]{figures/facenet_fig3.pdf}\par
+    \vskip0.3em
+    \setlength{\fboxrule}{1.1pt}\setlength{\fboxsep}{3pt}%
+    \fcolorbox{lumenPrimary}{lumenTint}{{\small$\|f(A)-f(P)\|_2^2+\alpha\ <\ \|f(A)-f(N)\|_2^2$}}\par
+    \vskip0.3em
+    {\small\textbf{Pull close} $\cdot$ \textbf{Push apart}\par}
+    \vskip0.3em
+    \begin{tikzpicture}[every node/.style={font=\tiny}]
+      \foreach \x/\y in {-1.85/0.34,-1.5/0.5,-1.7/0.1,-1.2/0.28,-1.8/-0.06,-1.3/-0.18,-1.6/0.58}
+        \fill[lumenPrimary] (\x,\y) circle (0.065);
+      \foreach \x/\y in {0.3/0.04,0.68/0.22,1.02/-0.04,0.55/-0.22,1.15/0.36,0.85/0.46,1.25/-0.28}
+        \fill[orange] (\x,\y) -- ++(-0.07,-0.12) -- ++(0.14,0) -- cycle;
+      \foreach \x/\y in {-0.5/-0.58,-0.12/-0.68,-0.32/-0.36,0.18/-0.52,-0.65/-0.26,0.4/-0.72}
+        \fill[teal] (\x-0.06,\y-0.06) rectangle (\x+0.06,\y+0.06);
+      \fill[lumenPrimary] (1.9,0.4) circle (0.05);
+      \node[right=1.5pt,font=\fontsize{5}{6}\selectfont] at (1.9,0.4) {Person A};
+      \fill[orange] (1.9,0.2) -- ++(-0.055,-0.1) -- ++(0.11,0) -- cycle;
+      \node[right=1.5pt,font=\fontsize{5}{6}\selectfont] at (1.9,0.2) {Person B};
+      \fill[teal] (1.855,-0.24) rectangle (1.945,-0.15);
+      \node[right=1.5pt,font=\fontsize{5}{6}\selectfont] at (1.9,-0.195) {Person C};
+    \end{tikzpicture}\par
+    \vskip0.2em
+    {\footnotesize Triplet learning turns \textbf{semantic identity} into \textbf{geometric separation}.\par}
+    \vskip0.15em
+    {\tiny\color{lumenSlate}Based on FaceNet (Schroff et al., CVPR 2015, Fig.~3); scatter plot is schematic.\par}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.54\textwidth}
+    \centering
+    {\small\bfseries\color{lumenPrimary}VISAtlas: Type Supervision $+$ Triplet Learning\par}
+    \vskip0.3em
+    \includegraphics[height=2.6cm]{figures/embedding_fig2_full.pdf}\par
+    \vskip0.35em
+    \setlength{\fboxrule}{1.2pt}\setlength{\fboxsep}{4pt}%
+    \fcolorbox{lumenPrimary}{lumenTint}{{\small$\displaystyle L=L_{CE}+\beta L_{TR}$}}\par
+    \vskip0.4em
+    \begin{tabular}{@{}l@{\hspace{0.9em}}l@{}}
+      {\footnotesize $L_{CE}$: $q_n\approx p_n$} & {\footnotesize\textbf{Type semantics}}\\[0.15em]
+      {\footnotesize $L_{TR}$: $d(q_n,q_m)+\alpha\ \le\ d(q_n,q_l)$} & {\footnotesize\textbf{Relative geometry}}
+    \end{tabular}\par
+  \end{minipage}
+\end{frame}
+
+
+\begin{frame}{Why Not Conventional Dimensionality Reduction?}
+  \framesubtitle{VISAtlas prioritizes semantic interpretability over a generic 2-D projection.}
+  \vspace*{-0.45cm}
+  \begin{minipage}[t]{0.46\textwidth}
+    \centering
+    \begin{minipage}[t]{0.40\textwidth}\centering
+      \includegraphics[height=2.2cm]{figures/fig6_pca.png}\par
+      \vskip0.2em
+      {\tiny\color{lumenAccent}\textbf{\checkmark\ Global structure}\par}
+      \vskip0.06em
+      {\tiny\color{lumenPrimary}\textbf{$\times$\ Minor types obscured}\par}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.34\textwidth}\centering
+      \includegraphics[height=2.2cm]{figures/fig6_tsne.png}\par
+      \vskip0.2em
+      {\tiny\color{lumenAccent}\textbf{\checkmark\ Local clusters}\par}
+      \vskip0.06em
+      {\tiny\color{lumenPrimary}\textbf{$\times$\ Distances not interpretable}\par}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.24\textwidth}\centering
+      \includegraphics[height=2.2cm]{figures/fig6_legend.png}
+    \end{minipage}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.12\textwidth}
+    \centering
+    \vspace*{1.15cm}
+    {\color{lumenAccent}\large$\longrightarrow$}\par
+    \vskip0.15em
+    {\tiny\color{lumenSlate}generic projection\par}
+    \vskip0.08em
+    {\tiny\bfseries\color{lumenPrimary}interpretable projection\par}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.40\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style={font=\tiny}]
+      \node[inner sep=0] (ov) at (0,0) {\includegraphics[height=2.7cm]{figures/fig4d.png}};
+      \node[fill=white,inner sep=1pt,text=lumenSlate,font=\tiny] at (0,-0.78)
+        {Position is explained by the 11 embedding dimensions};
+      \node[fill=white,inner sep=1pt,text=lumenPrimary,font=\tiny] at (-1.5,1.28) {semantic anchors};
+      \draw[->,draw=lumenAccent,line width=0.5pt] (-1.15,1.2) -- (-0.82,0.82);
+      \node[fill=white,inner sep=1pt,text=lumenSlate,font=\tiny] at (1.4,0.42) {Point anchor};
+      \draw[->,draw=lumenAccent,line width=0.5pt] (1.18,0.36) -- (0.98,0.27);
+      \node[fill=white,inner sep=1pt,text=lumenSlate,font=\tiny] at (-1.38,-0.5) {Bar anchor};
+      \draw[->,draw=lumenAccent,line width=0.5pt] (-1.14,-0.43) -- (-0.92,-0.33);
+      \node[fill=white,inner sep=1pt,text=lumenAccent,font=\tiny] at (1.22,-0.62) {Circle anchor};
+      \draw[->,draw=lumenAccent,line width=0.5pt] (1.02,-0.52) -- (0.9,-0.34);
+    \end{tikzpicture}\par
+    \vskip0.1em
+    {\small $P_n=\sum_i q_n^i\,v_i$\par}
+    \vskip0.3em
+    \begin{tikzpicture}[every node/.style={font=\tiny}]
+      \node (pn) at (0,0) {$\circ$};
+      \node[right=1pt of pn,text=lumenSlate] {embedding point};
+      \node[text=lumenPrimary] (ca) at (0,0.62) {$\bullet$};
+      \node[right=1pt of ca,text=lumenSlate] {Circle anchor};
+      \draw[->,draw=lumenAccent,line width=0.7pt]
+        (pn) -- node[right=1pt,font=\tiny,pos=0.5]{strong weight} (ca);
+      \node[text=lumenPrimary] (ba) at (-1.6,-0.55) {$\bullet$};
+      \node[right=1pt of ba,text=lumenSlate] {Bar anchor};
+      \node[text=lumenPrimary] (pa) at (0.55,-0.55) {$\bullet$};
+      \node[right=1pt of pa,text=lumenSlate] {Point anchor};
+    \end{tikzpicture}\par
+  \end{minipage}
+  \vfill
+  \begin{center}
+    \setlength{\fboxsep}{4pt}%
+    \colorbox{lumenTint}{%
+      \parbox{0.94\textwidth}{\centering\small
+        \textbf{VISAtlas keeps visualization-type semantics visible in the 2-D layout.}}}%
+  \end{center}
+  \vskip0.1em
+\end{frame}
+
+\begin{frame}{Inspecting the 11-D Embedding}
+  \framesubtitle{Embedding Histogram exposes the distribution of each semantic dimension.}
+  \vspace*{-0.5cm}
+  \begin{minipage}[t]{0.38\textwidth}\vspace{0pt}
+    \centering
+    \includegraphics[height=3.6cm]{figures/fig7_histogram.png}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.59\textwidth}\vspace{0pt}
+    \centering
+    \vspace*{0.15cm}
+    {\small $q_n=(q_n^1,\ldots,q_n^{11})$, \quad
+      \setlength{\fboxrule}{0.8pt}\setlength{\fboxsep}{2pt}%
+      \fcolorbox{lumenPrimary}{lumenTint}{$q_n^{\mathrm{Point}}$}
+      \ $\longrightarrow$ histogram\par}
+    \vskip0.45em
+    \begin{tikzpicture}[every node/.style={font=\tiny},x=1cm,y=1cm]
+      \foreach \i/\h in {0/0.82,1/0.62,2/0.45,3/0.3,4/0.24,5/0.3,6/0.42,7/0.56,8/0.72}{
+        \fill[lumenEdge] (-1.66+\i*0.37,0) rectangle (-1.66+\i*0.37+0.32,\h);
+      }
+      \draw[lumenSlate,line width=0.5pt] (-1.7,0) -- (1.72,0);
+      \draw[lumenPrimary,line width=0.5pt] (-1.7,0.92) -- (1.72,0.92);
+      \foreach \i in {0,1,2,3,4,5,6,7,8}
+        \draw[lumenSlate,line width=0.3pt] (-1.66+\i*0.37,0) -- (-1.66+\i*0.37,-0.05);
+      \draw[draw=lumenAccent,line width=1pt,dashed]
+        (-1.66+0.37,-0.02) rectangle (-1.66+3*0.37,0.95);
+      \node[text=lumenAccent,anchor=west] at (-0.75,0.5) {0.2--0.4};
+      \node[anchor=north] at (-1.66,-0.1) {0.1};
+      \node[anchor=north] at (1.62,-0.1) {1.0};
+      \node[anchor=north,text=lumenSlate] at (-1.66+3*0.37+0.06,-0.32) {Point histogram (schematic)};
+      \draw[->,draw=lumenAccent,line width=0.9pt] (-1.0,-0.5) -- (-1.0,-0.95);
+      % icons
+      \foreach \x/\y in {-1.75/-1.15,-1.55/-1.35,-1.35/-1.2,-1.15/-1.4,-1.75/-1.52}
+        \fill[lumenPrimary] (\x,\y) circle (0.045);
+      \node[text=lumenSlate] at (-1.62,-1.72) {point-like};
+      \draw[lumenPrimary,line width=0.4pt] (-0.55,-1.15) -- (-0.25,-1.35);
+      \draw[lumenPrimary,line width=0.4pt] (-0.55,-1.15) -- (-0.75,-1.4);
+      \draw[lumenPrimary,line width=0.4pt] (-0.55,-1.15) -- (-0.35,-1.5);
+      \draw[lumenPrimary,line width=0.4pt] (-0.25,-1.35) -- (-0.75,-1.4);
+      \foreach \x/\y in {-0.55/-1.15,-0.25/-1.35,-0.75/-1.4,-0.35/-1.5}
+        \fill[lumenPrimary] (\x,\y) circle (0.045);
+      \node[text=lumenSlate] at (-0.42,-1.72) {network-like};
+    \end{tikzpicture}\par
+    \vskip0.55em
+    {\footnotesize
+      \textbullet\ High values $\rightarrow$ \textbf{confident association}\\[1pt]
+      \textbullet\ Broad distribution $\rightarrow$ \textbf{ambiguous type}\\[1pt]
+      \textbullet\ Low-value Point cases $\rightarrow$ often \textbf{Trees \& Networks}\par}
+  \end{minipage}
+  \vfill
+  \begin{center}
+    \setlength{\fboxsep}{4pt}%
+    \colorbox{lumenTint}{%
+      \parbox{0.94\textwidth}{\centering\small
+        \footnotesize\textbf{The histogram makes individual embedding dimensions inspectable and exposes model confusion.}}}%
+  \end{center}
+  \vskip0.1em
+\end{frame}
+
+\begin{frame}{Interactive Exploration and Visual Query}
+  \framesubtitle{Users can filter, select, query, and inspect similar visualizations.}
+  \vspace*{-0.6cm}
+  \begin{minipage}[t]{0.15\textwidth}\vspace{0pt}
+    \centering
+    \vspace*{0.7cm}
+    \stagebadge{1}\ {\small\bfseries FILTER}\par
+    \vskip0.25em
+    {\tiny\color{lumenSlate}Histogram bins or lasso selection\par}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.62\textwidth}\vspace{0pt}
+    \centering
+    \begin{tikzpicture}[every node/.style={font=\tiny}]
+      \node[inner sep=0] (f7) at (0,0) {\includegraphics[height=4.55cm]{figures/fig7_interface.png}};
+      \node[fill=white,inner sep=1pt,text=lumenSlate] at (2.85,1.75) {zoom for local details};
+      \draw[->,draw=lumenAccent,line width=0.5pt] (2.5,1.68) -- (1.95,1.15);
+    \end{tikzpicture}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.20\textwidth}\vspace{0pt}
+    \centering
+    \vspace*{1.9cm}
+    \stagebadge{2}\ {\small\bfseries QUERY}\par
+    \vskip0.25em
+    {\tiny\color{lumenSlate}Select a point or upload an image\par}
+    \vskip0.8em
+    \stagebadge{3}\ {\small\bfseries RETRIEVE}\par
+    \vskip0.25em
+    {\tiny\color{lumenSlate}Return the most similar visualizations\par}
+    \vskip0.6em
+    {\small $q_{\mathrm{query}}\to$ nearest embeddings\par}
+    \vskip0.15em
+    {\tiny\color{lumenSlate}cosine similarity or projected Euclidean distance\par}
+  \end{minipage}
+  \vfill
+  \begin{center}
+    \begin{tikzpicture}[every node/.style={font=\small},
+        box/.style={draw=lumenPrimary!60,fill=lumenTint,rounded corners=2pt,
+                    inner sep=3pt,font=\small},
+        ar/.style={-{Stealth[length=1.8mm,width=1.4mm]},draw=lumenAccent,line width=1pt}]
+      \node[box] (ex) {Explore};
+      \node[box,right=0.7cm of ex] (fi) {Filter};
+      \node[box,right=0.7cm of fi] (qu) {Query};
+      \node[box,right=0.7cm of qu] (re) {Retrieve};
+      \draw[ar] (ex) -- (fi);
+      \draw[ar] (fi) -- (qu);
+      \draw[ar] (qu) -- (re);
+    \end{tikzpicture}
+  \end{center}
+  \vskip0.05em
 \end{frame}
 
 \end{document}
