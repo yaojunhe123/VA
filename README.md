@@ -28,8 +28,11 @@ custom **Lumen** beamer theme. All source is self-contained in this repository.
 │   ├── facenet_fig3.pdf/.png       # anchor/positive/negative geometry (FaceNet)
 │   ├── facenet_fig7_strip.pdf/.png # one cluster row: same identity, varied looks
 │   ├── resnet_stages.png           # input -> conv1/conv3/conv5 -> GAP -> q
+│   ├── fig3_histogram.png          # full Embedding Histogram panel (Fig. 3b)
+│   ├── fig3_point.png              # Point small multiple (zoom-in case)
 │   ├── fig6_pca/tsne/legend.png    # PCA vs. t-SNE alternatives (Fig. 6)
-│   ├── fig4d.png                   # sampling + density radial overview
+│   ├── fig4a/b/c/d.png             # projection, overdrawing, density, sampling
+│   ├── fig3_gallery.png            # Visualization Gallery panel (Fig. 3c)
 │   ├── fig7_interface.png          # interface: histogram/overview/query/gallery
 │   ├── fig7_histogram.png          # Embedding Histogram panel (Fig. 7a)
 │   ├── center_*.png, left_*.png, right_*.png    # System Overview assets
@@ -61,7 +64,11 @@ Sources used for the figure crops:
   (triplet geometry) and Fig. 7 (face-cluster strip); `extract_facenet_figs.py`
   expects a local copy at `/tmp/opencode/facenet.pdf`.
 - VISAtlas interface figures (Chapter 5 slides): `extract_interface_figs.py`
-  crops Fig. 4(d), Fig. 6 (PCA/t-SNE/legend) and Fig. 7 from the paper PDF.
+  crops Fig. 3(b) (Embedding Histogram + Point small multiple) and 3(c)
+  (Gallery), Fig. 4(a-d), Fig. 6 (PCA/t-SNE) and Fig. 7 from the paper PDF.
+  The Fig. 3(b)/(c) crops have the paper's orange corner badges erased
+  (`erase_corner_badge`); Fig. 7 has the paper's own a/b/c tag boxes masked
+  (`MASK_BOXES` + gradient reconstruction) so only the slide's ①②③ remain.
 - Real ResNet50 activations for the embedding slide: run
   `extract_resnet_stages.py` inside the `visatlas` conda env (loads the
   released 11250.h5 + forvis2.h5 weights, uses `Crawled data/point/506.png`),
@@ -86,9 +93,12 @@ the paper and repository).
 8. From Triplet Metric Learning to VISAtlas — FaceNet Fig. 3 (triplet
    geometry) + schematic embedding clusters vs. VISAtlas Fig. 2,
    L = L_CE + β·L_TR, type semantics and relative geometry
-9. Why Not Conventional Dimensionality Reduction? — PCA/t-SNE (Fig. 6)
-   vs. the semantic radial Embedding Overview (Fig. 4d)
-10. Inspecting the 11-D Embedding — Embedding Histogram (Fig. 7a) plus a
-    schematic Point-histogram case (low bins → Trees & Networks)
-11. Interactive Exploration and Visual Query — Fig. 7 interface with
-    FILTER / QUERY / RETRIEVE callouts and the Explore→Filter→Query→Retrieve flow
+9. Why VISAtlas Avoids PCA and t-SNE — three-column comparison
+   (PCA | t-SNE | VISAtlas): large Fig. 6 panels vs. Fig. 4(d) with light
+   semantic-anchor arrows, closed by a one-line takeaway strip
+10. How VISAtlas Builds an Interactive Embedding Space — central Fig. 4(d)
+    Embedding Overview hub with four callouts: semantic projection, scalable
+    rendering (overdrawing/density), linked Embedding Histogram, and
+    query → similarity → gallery retrieval
+11. Interactive Exploration and Visual Query — large Fig. 7 with only
+    FILTER / QUERY / RETRIEVE callouts
