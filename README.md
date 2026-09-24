@@ -7,7 +7,7 @@ custom **Lumen** beamer theme. All source is self-contained in this repository.
 
 ```
 .
-├── talk.tex                        # presentation source (8 frames)
+├── talk.tex                        # presentation source (7 sections, 25 frames)
 ├── beamerthemelumen.sty            # Lumen theme (self-contained in repo root)
 ├── beamercolorthemelumen.sty
 ├── beamerfontthemelumen.sty
@@ -28,11 +28,8 @@ custom **Lumen** beamer theme. All source is self-contained in this repository.
 │   ├── facenet_fig3.pdf/.png       # anchor/positive/negative geometry (FaceNet)
 │   ├── facenet_fig7_strip.pdf/.png # one cluster row: same identity, varied looks
 │   ├── resnet_stages.png           # input -> conv1/conv3/conv5 -> GAP -> q
-│   ├── fig3_histogram.png          # full Embedding Histogram panel (Fig. 3b)
-│   ├── fig3_point.png              # Point small multiple (zoom-in case)
 │   ├── fig6_pca/tsne/legend.png    # PCA vs. t-SNE alternatives (Fig. 6)
-│   ├── fig4a/b/c/d.png             # projection, overdrawing, density, sampling
-│   ├── fig3_gallery.png            # Visualization Gallery panel (Fig. 3c)
+│   ├── fig4d.png                   # sampling + density radial overview
 │   ├── fig7_interface.png          # interface: histogram/overview/query/gallery
 │   ├── fig7_histogram.png          # Embedding Histogram panel (Fig. 7a)
 │   ├── center_*.png, left_*.png, right_*.png    # System Overview assets
@@ -64,11 +61,7 @@ Sources used for the figure crops:
   (triplet geometry) and Fig. 7 (face-cluster strip); `extract_facenet_figs.py`
   expects a local copy at `/tmp/opencode/facenet.pdf`.
 - VISAtlas interface figures (Chapter 5 slides): `extract_interface_figs.py`
-  crops Fig. 3(b) (Embedding Histogram + Point small multiple) and 3(c)
-  (Gallery), Fig. 4(a-d), Fig. 6 (PCA/t-SNE) and Fig. 7 from the paper PDF.
-  The Fig. 3(b)/(c) crops have the paper's orange corner badges erased
-  (`erase_corner_badge`); Fig. 7 has the paper's own a/b/c tag boxes masked
-  (`MASK_BOXES` + gradient reconstruction) so only the slide's ①②③ remain.
+  crops Fig. 4(d), Fig. 6 (PCA/t-SNE/legend) and Fig. 7 from the paper PDF.
 - Real ResNet50 activations for the embedding slide: run
   `extract_resnet_stages.py` inside the `visatlas` conda env (loads the
   released 11250.h5 + forvis2.h5 weights, uses `Crawled data/point/506.png`),
@@ -82,23 +75,16 @@ the paper and repository).
 
 ## Deck outline
 
-1. Title
-2. Motivation — quotes from the VISAtlas paper + claim
-3. Research questions
-4. Related work — temporal citation provenance graph
-5. VISAtlas System Overview — what goes in / what it does / what users can do
-6. Data Collection — controlled coverage + realistic diversity
-7. Image Embedding via CNN — real ResNet50 activations: input image ->
-   conv1/conv3/conv5 feature maps -> GAP -> 11-D probabilities
-8. From Triplet Metric Learning to VISAtlas — FaceNet Fig. 3 (triplet
-   geometry) + schematic embedding clusters vs. VISAtlas Fig. 2,
-   L = L_CE + β·L_TR, type semantics and relative geometry
-9. Why VISAtlas Avoids PCA and t-SNE — three-column comparison
-   (PCA | t-SNE | VISAtlas): large Fig. 6 panels vs. Fig. 4(d) with light
-   semantic-anchor arrows, closed by a one-line takeaway strip
-10. How VISAtlas Builds an Interactive Embedding Space — central Fig. 4(d)
-    Embedding Overview hub with four callouts: semantic projection, scalable
-    rendering (overdrawing/density), linked Embedding Histogram, and
-    query → similarity → gallery retrieval
-11. Interactive Exploration and Visual Query — large Fig. 7 with only
-    FILTER / QUERY / RETRIEVE callouts
+1. **Context** — Where, When, and by Whom
+2. **Motivation & Research Questions** — paper quotes + claim; the four questions
+3. **Related Work & Contributions** — citation provenance graph; contributions
+4. **System & Method** — System Overview; Data Collection; Image Embedding via
+   CNN (real ResNet50 activations); FaceNet triplet geometry -> VISAtlas
+   objective; Why VISAtlas Avoids PCA and t-SNE (three-column comparison);
+   How VISAtlas Builds an Interactive Embedding Space (central Fig. 4(d) hub)
+5. **Evaluation: Case Studies** — Does real-world data help?; comparing
+   collections; composites and retrieval; user study
+6. **Our Reproduction & Discussion** — we ran the released system; documented
+   weak spots; extreme 4-way composite; minimal-pair test; our critical take
+7. **Impact & Conclusion** — from one paper to a research programme;
+   take-home messages

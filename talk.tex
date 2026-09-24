@@ -3,6 +3,7 @@
 \usetheme[palette=\lumenpalette,progressbar=true,sectionpages=true]{lumen}
 \usetikzlibrary{arrows.meta,positioning,calc}
 \usepackage{amssymb}
+\usepackage{booktabs}
 
 \title{Reproducing VISAtlas}
 \subtitle{An Image-Based Exploration and Query System for Large Visualization Collections}
@@ -17,6 +18,44 @@
 \begin{frame}[plain]
   \titlepage
 \end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Context}
+
+\begin{frame}{Where, When, and by Whom}
+  \begin{columns}[T]
+  \begin{column}{0.5\textwidth}
+  \small
+  \textbf{Venue}
+  \begin{itemize}\small
+    \item \textbf{IEEE Transactions on Visualization and Computer Graphics} (TVCG) --- the field's flagship journal
+    \item Presented at \textbf{IEEE VIS 2023}, TVCG track (accepted Dec.\ 2022)
+    \item Ships with an open dataset (17{,}842 images) and public code
+  \end{itemize}
+  \end{column}
+  \begin{column}{0.5\textwidth}
+  \small
+  \textbf{Authors --- all at HKUST(GZ)}
+  \begin{itemize}\small
+    \item \textbf{Yilin Ye} --- PhD student, first author, built the system
+    \item \textbf{Rong Huang} --- PhD student, architecture / computational aesthetics background
+    \item \textbf{Wei Zeng} --- Assistant Professor, corresponding author, group lead
+  \end{itemize}
+  \end{column}
+  \end{columns}
+  \vspace{3mm}
+  \begin{center}
+    \setlength{\fboxsep}{4pt}%
+    \colorbox{lumenTint}{%
+      \parbox{0.94\textwidth}{\small
+        \textbf{Where are they now?} Yilin Ye's PhD thesis frames \textbf{VISAtlas as Study 1} of a broader line on embedding-based visual exploration, continued in \textbf{ModalChorus} (2024) and \textbf{AKRMap}/\textbf{DKMap} (2025--26). Rong Huang co-authored a 2025 follow-up applying the same method to human-vs-AI paintings. Wei Zeng continues to lead the group at HKUST(GZ). \emph{(See the citation-provenance timeline shortly.)}}}%
+  \end{center}
+\end{frame}
+
+\section{Motivation \& Research Questions}
 
 \begin{frame}{Motivation}
   \begin{quote}\itshape
@@ -54,10 +93,35 @@
   \end{flushright}
 \end{frame}
 
+\section{Related Work \& Contributions}
+
 \begin{frame}{Related Work: Citation Provenance}
   \centering
   \includegraphics[width=\textwidth]{figures/citation_provenance.pdf}
 \end{frame}
+
+\begin{frame}{Contributions}
+  \begin{columns}[T]
+  \begin{column}{0.09\textwidth}
+    \vspace{1mm}
+    \stagebadge{1}\\[9mm]
+    \stagebadge{2}\\[9mm]
+    \stagebadge{3}
+  \end{column}
+  \begin{column}{0.91\textwidth}
+  \vspace{1mm}
+  \small A \textbf{neural image embedding} for chart images: a CNN (ResNet50) trained with a \emph{triplet loss} on a new 17{,}842-image dataset, turning any chart into an 11-dimensional, human-readable ``type vector''
+  \vspace{5mm}
+
+  \small A \textbf{coordinated multiple-view (CMV) interface}: a radial \emph{Embedding Overview}, an \emph{Embedding Histogram}, and a \emph{Visualization Gallery} for query-by-example
+  \vspace{5mm}
+
+  \small Three \textbf{case studies} showing the system can compare collections, surface composite chart designs, and retrieve similar designs from real or hand-drawn input
+  \end{column}
+  \end{columns}
+\end{frame}
+
+\section{System \& Method}
 
 \begin{frame}{VISAtlas System Overview}
   \vspace*{-0.3cm}
@@ -330,6 +394,208 @@
       \node[inner sep=0] at (4.85,-2.52) {\includegraphics[height=1.75cm]{figures/fig3_gallery.png}};
       \draw[ar] (2.26,-0.52) -- (2.42,-0.52);
     \end{tikzpicture}
+  \end{center}
+  \vfill
+\end{frame}
+
+\section{Evaluation: Case Studies}
+% =====================================================
+
+\begin{frame}{Does Real-World Data Actually Help?}
+  \begin{columns}[T]
+  \begin{column}{0.55\textwidth}
+  \centering
+  \includegraphics[width=0.95\linewidth]{figures/eval_model_perf.png}
+  \end{column}
+  \begin{column}{0.45\textwidth}
+  \small
+  \begin{itemize}
+    \item Overall F1: \textbf{82.3\%} (synthetic only) $\rightarrow$ \textbf{94.4\%} (synthetic + real), same CNN
+    \item Biggest gains: \textbf{Map} and \textbf{Diagram} --- real maps have texture and noise a clean D3 render never has
+    \item CNNs clearly beat classic ML (SVM, Random Forest)
+    \item Triplet loss adds another $\sim$2 points on top of plain classification
+  \end{itemize}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Case Study 1 --- Comparing Collections}
+  \begin{columns}[T]
+  \begin{column}{0.48\textwidth}
+  \small
+  \begin{itemize}
+    \item \textbf{Beagle} (web-crawled, 41k): skews heavily to Line, Bar, Circle, Point
+    \item \textbf{VIS30K} (IEEE VIS papers, 29k): more balanced, but Diagram-heavy
+    \item \textbf{Data2Vis} (synthetic, 4.3k): narrow --- only Point, Line, Area, Bar
+  \end{itemize}
+  \vspace{2mm}
+  {\tiny\color{lumenSlate}Counts we observed ourselves, running the Beagle dataset locally --- confirms the paper's claim.}
+  \end{column}
+  \begin{column}{0.52\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{figures/eval_beagle_skew.png}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Case Studies 2 \& 3 --- Composites and Retrieval}
+  \textbf{Study 2: finding composite visualizations}
+  \begin{itemize}\small
+    \item Filter for points \emph{without} a dominant embedding dimension (e.g.\ Matrix $\approx$ Table $\approx 0.4$--$0.5$)
+    \item Found: table visualizations with embedded heatmap cells --- genuinely composite designs a keyword search would never surface
+  \end{itemize}
+  \vspace{2mm}
+  \textbf{Study 3: querying with real vs.\ hand-drawn sketches}
+  \begin{itemize}\small
+    \item Robust to different colormaps and layouts for \emph{real} images
+    \item A rough hand-drawn pie chart came back misclassified as a spiral line graph --- wiggly strokes fall outside the training distribution
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{User Study: Does It Actually Help People?}
+  \begin{columns}[T]
+  \begin{column}{0.5\textwidth}
+  \small
+  \begin{itemize}
+    \item 12 postgraduate participants, 3 tasks mirroring the 3 case studies
+    \item 7-point Likert scale; \textbf{every question averaged above 5/7}
+    \item Best-rated: visual design of the Embedding Overview (mean 6.16)
+    \item Weak spot: the Embedding Histogram's multi-step filtering took time to learn
+  \end{itemize}
+  \end{column}
+  \begin{column}{0.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{figures/eval_user_study.png}
+  \end{column}
+  \end{columns}
+\end{frame}
+
+% =====================================================
+\section{Our Reproduction \& Discussion}
+% =====================================================
+
+\begin{frame}{We Didn't Just Read It --- We Ran It}
+  \small
+  \begin{itemize}
+    \item Installed Python 3.9 + TensorFlow 2.8, Node/Vite, and all three datasets locally on Windows
+    \item Fixed several rough edges (dependency conflicts, hard-coded model paths) --- a reminder that research code $\neq$ production code
+    \item End result: a fully working local instance, classifying and retrieving live
+  \end{itemize}
+  \vspace{4mm}
+  \begin{center}
+  \begin{tikzpicture}
+    \node[draw,rounded corners,fill=lumenTint,align=center,font=\scriptsize,minimum width=2.8cm,minimum height=1cm] (a) {Install deps};
+    \node[draw,rounded corners,fill=lumenTint,align=center,font=\scriptsize,minimum width=2.8cm,minimum height=1cm, right=4mm of a] (b) {Fix version\\conflicts};
+    \node[draw,rounded corners,fill=lumenPrimary!15,align=center,font=\scriptsize,minimum width=2.8cm,minimum height=1cm, right=4mm of b] (c) {Load 3\\datasets};
+    \node[draw,rounded corners,fill=lumenAccent,text=white,align=center,font=\scriptsize,minimum width=2.8cm,minimum height=1cm, right=4mm of c] (d) {Running\\locally!};
+    \foreach \x/\y in {a/b,b/c,c/d} \draw[-{Latex}, lumenPrimary] (\x) -- (\y);
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Confirming the Paper's Own Documented Weak Spots}
+  \begin{columns}[T]
+  \begin{column}{0.5\textwidth}
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/test1_thin_edge_network.png}\\
+  {\scriptsize Thin-edge network graph}
+  \end{column}
+  \begin{column}{0.5\textwidth}
+  \centering
+  \includegraphics[width=0.55\linewidth]{figures/test3_handdrawn_pie.png}\\
+  {\scriptsize Simulated hand-drawn pie chart}
+  \end{column}
+  \end{columns}
+  \vspace{3mm}
+  \small Both images reproduced failure modes the paper itself describes: the sparse network was pulled toward \emph{Point}, and the wobbly hand-drawn pie chart did not classify cleanly as \emph{Circle}. Good --- the paper's claims replicate.
+\end{frame}
+
+\begin{frame}{Going Further: An Extreme 4-Way Composite}
+  \begin{columns}[T]
+  \begin{column}{0.45\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{figures/test6_extreme_composite_map_network_circle_word.png}
+  \end{column}
+  \begin{column}{0.55\textwidth}
+  \small
+  We mixed \textbf{four} visual vocabularies in one image: pastel map regions, a sparse network, three small pie charts, and scattered text labels.
+  \vspace{2mm}
+  \begin{center}
+  \begin{tabular}{lc}
+  \toprule
+  Type & Score\\
+  \midrule
+  \textbf{Circle} & \textbf{0.671}\\
+  Net & 0.306\\
+  Map & 0.015\\
+  Word & 0.001\\
+  \bottomrule
+  \end{tabular}
+  \end{center}
+  \small The paper only tested \emph{two}-way composites (Matrix+Table) with comparably-weighted scores. Ours collapses hard onto one winner.
+  \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{A Minimal-Pair Test: Same Content, Different Rendering}
+  \begin{columns}[T]
+  \begin{column}{0.42\textwidth}
+  \centering
+  \includegraphics[width=0.85\linewidth]{figures/test7_composite_saturated_map.png}\\
+  {\tiny Map layer only: pastel $\rightarrow$ saturated \& bold-bordered}
+  \end{column}
+  \begin{column}{0.58\textwidth}
+  \centering
+  \includegraphics[width=0.85\linewidth]{figures/eval_minimal_pair.png}
+  \end{column}
+  \end{columns}
+  \vspace{2mm}
+  \small Same network, same pie hubs, same text, same positions --- \textcolor{lumenAccent}{\textbf{only}} colour saturation and border weight on the map layer changed. The winning category flips completely.
+\end{frame}
+
+\begin{frame}{Our Critical Take}
+  \begin{block}{What this suggests}
+  The embedding may respond more to \textbf{low-level visual salience} (colour saturation, contrast, edge density) than to the actual \emph{structural semantics} of a chart type.
+  \end{block}
+  \vspace{2mm}
+  \small
+  \begin{itemize}
+    \item The paper frames its embeddings as ``human-interpretable'' --- our minimal-pair test suggests that interpretation can be steered by pure rendering style, independent of content
+    \item This goes a step further than the paper's own admission that the model doesn't fully capture ``colormaps and layout arrangements''
+    \item \textbf{Discussion question:} if a CNN classifier can be flipped by style alone, how much should we trust embedding \emph{distance} as a proxy for design \emph{similarity}?
+  \end{itemize}
+\end{frame}
+
+% =====================================================
+\section{Impact \& Conclusion}
+% =====================================================
+
+\begin{frame}{From One Paper to a Research Programme}
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/citation_provenance.pdf}\\[1mm]
+  \footnotesize\color{lumenSlate} The core idea --- contextual, anchor-based projection of neural embeddings --- generalises from single-modality chart images (2022) to cross-modal LLM evaluation (2026), and to entirely new domains such as computational art criticism.
+\end{frame}
+
+\begin{frame}{Take-Home Messages}
+  \begin{enumerate}
+    \setlength\itemsep{4mm}
+    \item VISAtlas shows that \textbf{visual appearance}, not just metadata, is a legitimate and useful axis for exploring large chart collections
+    \item Its main trick --- a \textbf{fixed, human-labelled anchor layout} (RadViz + CNN) --- keeps a high-dimensional embedding interpretable, at the cost of distorting true distances
+    \item Its own authors, and our experiments, agree: the taxonomy and CNN backbone are still \textbf{too coarse} to fully capture design similarity
+    \item The idea proved durable: it is the direct ancestor of a still-active line of multimodal-embedding-visualization research
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[lumenPrimary] (current page.south west) rectangle (current page.north east);
+    \fill[lumenPrimaryDark,opacity=0.65] ([xshift=0.9cm,yshift=-1.7cm]current page.north east) circle (4.1cm);
+    \fill[lumenAccent,opacity=0.35] ([xshift=-1.5cm,yshift=1.3cm]current page.south west) circle (3.2cm);
+  \end{tikzpicture}
+  \vfill
+  \begin{center}
+  {\usebeamerfont{title}\color{white}Thank you!}\\[4mm]
+  {\Large\color{lumenEdge}Questions?}
   \end{center}
   \vfill
 \end{frame}
